@@ -23,7 +23,7 @@ const logger = new MyLogger();
           }
         },
       }),
-      connectionName: 'user',
+      connectionName: 'user_db',
     }),
   ],
 })
