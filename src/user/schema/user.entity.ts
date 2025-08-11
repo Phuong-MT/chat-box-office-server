@@ -7,10 +7,18 @@ export enum RoleEnum {
   // Thêm sau nếu cần
 }
 export type UserDocument = User & Document;
-@Schema()
+@Schema({ timestamps: true })
 export class User {
+  static readonly modelName = 'user';
+
+  static getName(this) {
+    return this.modelName;
+  }
   @Prop({ required: true })
   email: string;
+
+  @Prop({ required: true })
+  password: string;
 
   @Prop()
   username: string;

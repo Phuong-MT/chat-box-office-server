@@ -2,12 +2,12 @@ import { Module } from '@nestjs/common';
 import { UserService } from './user.service';
 import { UserController } from './user.controller';
 import { MongooseModule } from '@nestjs/mongoose';
-import { UserSchema } from './schema/user.entity';
+import { UserSchema, User } from './schema/user.entity';
 
 @Module({
   imports: [
     MongooseModule.forFeature(
-      [{ name: 'user', schema: UserSchema }],
+      [{ name: User.getName(), schema: UserSchema }],
       'user_db',
     ),
   ],
