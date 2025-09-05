@@ -6,7 +6,10 @@ import { MyLogger } from './logger';
 import { Connection } from 'mongoose';
 
 const logger = new MyLogger();
-
+export enum DBName {
+  USER_DB = 'USER_DB',
+  CHAT_BOX_DB = 'CHAT_BOX_DB',
+}
 @Module({
   imports: [
     MongooseModule.forRootAsync({
@@ -22,7 +25,7 @@ const logger = new MyLogger();
           }
         },
       }),
-      connectionName: 'user_db',
+      connectionName: DBName.USER_DB,
     }),
     MongooseModule.forRootAsync({
       imports: [ConfigModule],
@@ -31,13 +34,13 @@ const logger = new MyLogger();
         uri: configService.get<string>('MONGO_PATH_CHAT_MESS'),
         onConnectionCreate: (connection: Connection) => {
           if (connection) {
-            logger.log('chat_mess database connected successfully');
+            logger.log('chat-box database connected successfully');
           } else {
-            logger.log('chat_mess database connect failed');
+            logger.log('chat-box database connect failed');
           }
         },
       }),
-      connectionName: 'user_db',
+      connectionName: DBName.CHAT_BOX_DB,
     }),
   ],
 })
