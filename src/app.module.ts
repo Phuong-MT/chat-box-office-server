@@ -10,6 +10,8 @@ import { GroupChatModule } from './group_chat/group_chat.module';
 import { GroupMembersModule } from './group_members/group_members.module';
 import { MessagesModule } from './messages/messages.module';
 import { MessageReactionsModule } from './message_reactions/message_reactions.module';
+import { LinkModule } from './link/link.module';
+import { FileModule } from './file/file.module';
 @Module({
   imports: [
     ConfigModule.forRoot({
@@ -23,6 +25,8 @@ import { MessageReactionsModule } from './message_reactions/message_reactions.mo
     GroupMembersModule,
     MessagesModule,
     MessageReactionsModule,
+    LinkModule,
+    FileModule,
   ],
   controllers: [AppController],
   providers: [MyLogger, Logger, AuthModule],
