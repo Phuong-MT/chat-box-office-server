@@ -5,7 +5,11 @@ import { ConfigModule } from '@nestjs/config';
 import { ConnectDBModule } from './utils/connectDB';
 import { UserModule } from './user/user.module';
 import { AuthModule } from './auth/auth.module';
-import { FollowerModule } from './follower/follower.module';
+import { ChatboxModule } from './chatbox/chatbox.module';
+import { GroupChatModule } from './group_chat/group_chat.module';
+import { GroupMembersModule } from './group_members/group_members.module';
+import { MessagesModule } from './messages/messages.module';
+import { MessageReactionsModule } from './message_reactions/message_reactions.module';
 @Module({
   imports: [
     ConfigModule.forRoot({
@@ -14,9 +18,13 @@ import { FollowerModule } from './follower/follower.module';
     ConnectDBModule,
     UserModule,
     AuthModule,
-    FollowerModule,
+    ChatboxModule,
+    GroupChatModule,
+    GroupMembersModule,
+    MessagesModule,
+    MessageReactionsModule,
   ],
   controllers: [AppController],
-  providers: [MyLogger, Logger],
+  providers: [MyLogger, Logger, AuthModule],
 })
 export class AppModule {}
