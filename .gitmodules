@@ -1,0 +1,3 @@
+[submodule "src/chat-box-shared"]
+	path = src/chat-box-shared
+	url = git@github.com:Phuong-MT/chat-box-shared.git
