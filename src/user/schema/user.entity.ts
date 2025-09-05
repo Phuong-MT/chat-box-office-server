@@ -9,9 +9,9 @@ export enum RoleEnum {
 export type UserDocument = User & Document;
 @Schema({ timestamps: true })
 export class User {
-  static readonly modelName = 'user';
+  private static readonly modelName = 'user';
 
-  static getName(this) {
+  static getName() {
     return this.modelName;
   }
   @Prop({ required: true })

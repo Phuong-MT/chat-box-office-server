@@ -11,7 +11,7 @@ export type GroupMemberDocument = GroupMember & Document;
 
 @Schema({ timestamps: true })
 export class GroupMember {
-  static readonly modelName = 'group-member';
+  private static readonly modelName = 'group-member';
 
   static getName() {
     return this.modelName;

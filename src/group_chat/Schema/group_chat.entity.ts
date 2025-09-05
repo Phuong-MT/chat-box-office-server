@@ -9,7 +9,7 @@ export enum GroupType {
 export type GroupChatDocument = GroupChat & Document;
 @Schema({ timestamps: true })
 export class GroupChat {
-  static readonly modelName = 'group-chat';
+  private static readonly modelName = 'group-chat';
 
   static getName() {
     return this.modelName;
