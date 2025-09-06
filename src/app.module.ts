@@ -1,10 +1,34 @@
-import { Module } from '@nestjs/common';
+import { Logger, Module } from '@nestjs/common';
 import { AppController } from './app.controller';
-import { AppService } from './app.service';
-
+import { MyLogger } from './utils/logger';
+import { ConfigModule } from '@nestjs/config';
+import { ConnectDBModule } from './utils/connectDB';
+import { UserModule } from './user/user.module';
+import { AuthModule } from './auth/auth.module';
+import { ChatboxModule } from './chatbox/chatbox.module';
+import { GroupChatModule } from './group_chat/group_chat.module';
+import { GroupMembersModule } from './group_members/group_members.module';
+import { MessagesModule } from './messages/messages.module';
+import { MessageReactionsModule } from './message_reactions/message_reactions.module';
+import { LinkModule } from './link/link.module';
+import { FileModule } from './file/file.module';
 @Module({
-  imports: [],
+  imports: [
+    ConfigModule.forRoot({
+      isGlobal: true,
+    }),
+    ConnectDBModule,
+    UserModule,
+    AuthModule,
+    ChatboxModule,
+    GroupChatModule,
+    GroupMembersModule,
+    MessagesModule,
+    MessageReactionsModule,
+    LinkModule,
+    FileModule,
+  ],
   controllers: [AppController],
-  providers: [AppService],
+  providers: [MyLogger, Logger, AuthModule],
 })
 export class AppModule {}
