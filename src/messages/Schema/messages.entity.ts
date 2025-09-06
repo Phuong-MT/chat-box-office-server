@@ -4,6 +4,7 @@ import { File } from '@/file/Schema/file.entity';
 import { Link } from '@/link/Schema/link.entity';
 import { GroupChat } from '@/group_chat/Schema/group_chat.entity';
 
+export type MessagesDocument = Document & Messages;
 @Schema({ timestamps: true })
 export class Messages {
   private static readonly modelName = 'messages';
@@ -39,3 +40,5 @@ export class Messages {
   @Prop({ required: false, type: Boolean, default: false })
   isRetrieve: boolean;
 }
+
+export const MessagesSchema = SchemaFactory.createForClass(Messages);
