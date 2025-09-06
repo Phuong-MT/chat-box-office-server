@@ -1,10 +1,8 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { Document } from 'mongoose';
+import { Contacts } from '@/chat-box-shared/contact';
 
-export enum GroupType {
-  DIRECT = 'DIRECT',
-  GROUPT = 'GROUP',
-}
+const GroupType = Object.values(Contacts.GroupType);
 
 export type GroupChatDocument = GroupChat & Document;
 @Schema({ timestamps: true })
@@ -20,8 +18,8 @@ export class GroupChat {
   @Prop({ required: true })
   userCreate: string;
 
-  @Prop({ required: true, default: GroupType.DIRECT })
-  type: GroupType;
+  @Prop({ required: true, enum: GroupType, default: Contacts.GroupType.DIRECT })
+  type: String;
 
   @Prop()
   group_avarta: string;

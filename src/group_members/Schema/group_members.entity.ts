@@ -1,12 +1,9 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { Document, Types } from 'mongoose';
 import { GroupChat } from '@/group_chat/Schema/group_chat.entity';
+import { Contacts } from '@/chat-box-shared/contact';
 
-export enum RoleGroupMember {
-  ADMIN = 'ADMIN',
-  MANAGEMENT = 'MANAGEMENT',
-  MEMBER = 'MEMBER',
-}
+const RoleGroupMember = Object.values(Contacts.RoleGroupMembers);
 export type GroupMemberDocument = GroupMember & Document;
 
 @Schema({ timestamps: true })
@@ -25,10 +22,10 @@ export class GroupMember {
 
   @Prop({
     type: String,
-    enum: Object.values(RoleGroupMember),
-    default: RoleGroupMember.MEMBER,
+    enum: RoleGroupMember,
+    default: Contacts.RoleGroupMembers.MEMBER,
   })
-  role: RoleGroupMember;
+  role: string;
 
   @Prop({ type: String })
   lastReadMessageId?: string;
