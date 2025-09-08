@@ -15,8 +15,10 @@ import { AuthService } from './auth.service';
 import { LocalAuthGuard } from './passport/local-auth.guard';
 import { CreateUserDto } from './dto/create-auth.dto';
 import { ApiBody, ApiProperty, ApiResponse } from '@nestjs/swagger';
-
+import { Throttle } from '@nestjs/throttler';
 @Controller('auth')
+// ratelimit request 10/1min
+@Throttle({ default: { ttl: 60000, limit: 10 } })
 export class AuthController {
   constructor(private readonly authService: AuthService) {}
   @UseGuards(LocalAuthGuard)
