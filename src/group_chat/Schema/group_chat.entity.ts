@@ -22,7 +22,7 @@ export class GroupChat {
   type: String;
 
   @Prop()
-  group_avarta: string;
+  group_avartar: string;
 }
 
 export const GroupChatShema = SchemaFactory.createForClass(GroupChat);

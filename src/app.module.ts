@@ -40,7 +40,6 @@ import { ThrottlerGuard, ThrottlerModule } from '@nestjs/throttler';
   providers: [
     MyLogger,
     Logger,
-    AuthModule,
     {
       provide: APP_GUARD,
       useClass: ThrottlerGuard,

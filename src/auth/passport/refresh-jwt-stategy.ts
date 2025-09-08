@@ -17,9 +17,6 @@ export class JwtRefreshStrategy extends PassportStrategy(
   }
 
   async validate(payload: any) {
-    if (payload) {
-      throw new HttpException('Token has been revoked', 419);
-    }
     return {
       id: payload.id,
       email: payload.email,
