@@ -12,11 +12,19 @@ import { MessagesModule } from './messages/messages.module';
 import { MessageReactionsModule } from './message_reactions/message_reactions.module';
 import { LinkModule } from './link/link.module';
 import { FileModule } from './file/file.module';
+import { APP_GUARD } from '@nestjs/core';
+import { ThrottlerGuard, ThrottlerModule } from '@nestjs/throttler';
 @Module({
   imports: [
     ConfigModule.forRoot({
       isGlobal: true,
     }),
+    ThrottlerModule.forRoot([
+      {
+        ttl: 60000,
+        limit: 20,
+      },
+    ]),
     ConnectDBModule,
     UserModule,
     AuthModule,
@@ -29,6 +37,14 @@ import { FileModule } from './file/file.module';
     FileModule,
   ],
   controllers: [AppController],
-  providers: [MyLogger, Logger, AuthModule],
+  providers: [
+    MyLogger,
+    Logger,
+    AuthModule,
+    {
+      provide: APP_GUARD,
+      useClass: ThrottlerGuard,
+    },
+  ],
 })
 export class AppModule {}
