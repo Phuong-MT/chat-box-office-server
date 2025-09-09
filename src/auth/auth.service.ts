@@ -55,6 +55,15 @@ export class AuthService {
     if (IsEmailNotExit) {
       throw new HttpStatusError('Email not exit', 403);
     }
+
+    const IsUserNameNotExit = await this.usersService.findOne(
+      'username',
+      user_name,
+    );
+    if (IsUserNameNotExit) {
+      throw new HttpStatusError('UserName not exit', 403);
+    }
+
     const hassPassword = await hashPassword(password);
     const user = await this.usersService.create({
       user_name,
