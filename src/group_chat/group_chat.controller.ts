@@ -55,12 +55,10 @@ export class GroupChatController {
     @Request() req: any,
   ) {
     const user = req.user;
-    const userId = user?._id;
-    console.log(user);
-    return 'a';
-    // if (!userId || typeof userId != 'string') {
-    //   throw new HttpStatusError('Người tạo không tồn tại', 400);
-    // }
-    // return this.groupChatService.createGroupChat(payload, userId);
+    const userId = user._id;
+    if (!userId || typeof userId != 'string') {
+      throw new HttpStatusError('Người tạo không tồn tại', 400);
+    }
+    return this.groupChatService.createGroupChat(payload, userId);
   }
 }
