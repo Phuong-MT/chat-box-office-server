@@ -21,8 +21,11 @@ export class GroupChat {
   @Prop({ required: true, enum: GroupType, default: Contacts.GroupType.DIRECT })
   type: String;
 
-  @Prop()
-  group_avartar: string;
+  @Prop({ required: false, type: String })
+  group_avatar: string;
+
+  @Prop({ required: false, type: [String] })
+  userRef: string[]; // check with group chat direct
 }
 
 export const GroupChatShema = SchemaFactory.createForClass(GroupChat);

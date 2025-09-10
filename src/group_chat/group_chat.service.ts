@@ -1,5 +1,8 @@
 import { Injectable } from '@nestjs/common';
-import { CreateGroupChatDto } from './dto/create_group_chat.dto';
+import {
+  CreateGroupChatDirectDto,
+  CreateGroupChatDto,
+} from './dto/create_group_chat.dto';
 import { InjectConnection, InjectModel } from '@nestjs/mongoose';
 import { GroupChat, GroupChatDocument } from './Schema/group_chat.entity';
 import { DBName } from '@/utils/connectDB';
@@ -29,14 +32,16 @@ export class GroupChatService {
     const session = await this.connection.startSession();
     try {
       session.startTransaction();
-      const { name, groupType, group_avatar, memberId } = payload;
+      const { name, group_avatar, memberId } = payload;
+      const groupType = Contacts.GroupType.GROUP;
       const userCreate = userId;
+
       // step 1: create group-chat
       const createGroupChat = new this.groupChatModel({
         name,
         userCreate,
         type: groupType,
-        group_avartar: group_avatar || '',
+        group_avatar: group_avatar || '',
       });
       await createGroupChat.save({ session });
       const groupId = createGroupChat._id as Types.ObjectId;
@@ -73,5 +78,20 @@ export class GroupChatService {
     } finally {
       session.endSession();
     }
+  }
+  async createGroupChatDirect(
+    payload: CreateGroupChatDirectDto,
+    userId: string,
+  ) {
+    const { name, group_avatar, TargetID } = payload;
+    const groupType = Contacts.GroupType.DIRECT;
+    const createGroupChatDirect = new this.groupChatModel({
+      name,
+      type: groupType,
+      group_avartar: group_avatar || '',
+      userCreate: userId,
+      userRef: [userId, TargetID],
+    });
+    return await createGroupChatDirect.save();
   }
 }

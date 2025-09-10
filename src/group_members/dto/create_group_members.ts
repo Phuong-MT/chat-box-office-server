@@ -1,17 +1,20 @@
 import { ApiProperty } from '@nestjs/swagger';
-import {} from 'class-validator';
+import { IsString } from 'class-validator';
 import { Types } from 'mongoose';
 import { Contacts } from '@/chat-box-shared/contact';
 
 const RoleGroupMembers = Contacts.RoleGroupMembers;
 
 export class CreateGroupMembersDto {
-  @ApiProperty()
+  @ApiProperty({ example: 'abcxyz' })
+  @IsString()
   userId: string;
 
-  @ApiProperty()
+  @ApiProperty({ example: 'afaasrgs' })
+  @IsString()
   groupId: string | Types.ObjectId;
 
-  @ApiProperty({ enum: RoleGroupMembers })
+  @ApiProperty({ enum: RoleGroupMembers, example: 'MEMBER' })
+  @IsString()
   role: string;
 }

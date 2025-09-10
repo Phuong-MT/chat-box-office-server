@@ -7,7 +7,10 @@ import {
   UseGuards,
 } from '@nestjs/common';
 import { GroupChatService } from './group_chat.service';
-import { CreateGroupChatDto } from './dto/create_group_chat.dto';
+import {
+  CreateGroupChatDirectDto,
+  CreateGroupChatDto,
+} from './dto/create_group_chat.dto';
 import {
   ApiBearerAuth,
   ApiBody,
@@ -16,11 +19,17 @@ import {
 } from '@nestjs/swagger';
 import { JwtAuthGuard } from '@/auth/passport/jwt-auth-guard';
 import { HttpStatusError } from '@/utils/http-error/http-error-mess';
+import { Contacts } from '@/chat-box-shared/contact';
+import { MyLogger } from '@/utils/logger';
+
 @Controller('/api/group-chat')
 @UseGuards(JwtAuthGuard)
 @ApiBearerAuth('jwt')
 export class GroupChatController {
-  constructor(private readonly groupChatService: GroupChatService) {}
+  constructor(
+    private readonly groupChatService: GroupChatService,
+    private logger: MyLogger,
+  ) {}
   // create group-chat
 
   @ApiResponse({
@@ -49,7 +58,7 @@ export class GroupChatController {
       },
     },
   })
-  @Post('/create-group-chat')
+  @Post('/create-group-chat/group')
   async createGroupChat(
     @Body() payload: CreateGroupChatDto,
     @Request() req: any,
@@ -59,7 +68,22 @@ export class GroupChatController {
     if (!userId || typeof userId != 'string') {
       throw new HttpStatusError('Người tạo không tồn tại', 400);
     }
-    console.log(payload);
-    return this.groupChatService.createGroupChat(payload, userId);
+    return this.groupChatService.createGroupChat(
+      payload as CreateGroupChatDto,
+      userId,
+    );
+  }
+
+  @Post('/create-goup-chat/direct')
+  async createGroupChatDirect(
+    @Body() payload: CreateGroupChatDirectDto,
+    @Request() req: any,
+  ) {
+    const user = req.user;
+    const userId = user?._id;
+    if (!userId || typeof userId != 'string') {
+      throw new HttpStatusError('Người tạo không tồn tại', 400);
+    }
+    return this.groupChatService.createGroupChatDirect(payload, userId);
   }
 }
