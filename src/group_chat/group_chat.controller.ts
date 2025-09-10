@@ -59,6 +59,7 @@ export class GroupChatController {
     if (!userId || typeof userId != 'string') {
       throw new HttpStatusError('Người tạo không tồn tại', 400);
     }
+    console.log(payload);
     return this.groupChatService.createGroupChat(payload, userId);
   }
 }

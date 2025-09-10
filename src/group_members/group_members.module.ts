@@ -4,6 +4,7 @@ import { GroupMembersController } from './group_members.controller';
 import { MongooseModule } from '@nestjs/mongoose';
 import { GroupMemberSchema, GroupMember } from './Schema/group_members.entity';
 import { DBName } from '@/utils/connectDB';
+import { MyLogger } from '@/utils/logger';
 
 @Module({
   imports: [
@@ -13,6 +14,7 @@ import { DBName } from '@/utils/connectDB';
     ),
   ],
   controllers: [GroupMembersController],
-  providers: [GroupMembersService],
+  providers: [GroupMembersService, MyLogger],
+  exports: [GroupMembersService],
 })
 export class GroupMembersModule {}
