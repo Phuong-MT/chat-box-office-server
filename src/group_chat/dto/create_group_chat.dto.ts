@@ -20,6 +20,8 @@ export class CreateGroupChatBaseDto {
 
 export class CreateGroupChatDirectDto extends CreateGroupChatBaseDto {
   @ApiProperty({ example: '68999588daca8983e00ab5af' })
+  @IsString()
+  @IsNotEmpty()
   TargetID: string;
 }
 export class CreateGroupChatDto extends CreateGroupChatBaseDto {
