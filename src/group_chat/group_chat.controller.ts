@@ -40,7 +40,7 @@ export class GroupChatController {
         _id: '68be8b3b9a7df150862b1fe5',
         name: 'example',
         userCreate: '1757317947184-39638953',
-        type: 'DIRECT',
+        type: 'GROUP',
 
         group_avarta: '',
         createdAt: '2025-09-08T07:52:27.187+00:00',
@@ -75,6 +75,30 @@ export class GroupChatController {
   }
 
   @Post('/create-goup-chat/direct')
+  @ApiResponse({
+    status: HttpStatus.CREATED,
+    schema: {
+      example: {
+        _id: '68be8b3b9a7df150862b1fe5',
+        name: 'example',
+        userCreate: '1757317947184-39638953',
+        type: 'DIRECT',
+        group_avarta: '',
+        createdAt: '2025-09-08T07:52:27.187+00:00',
+        updatedAt: '2025-09-08T07:52:27.187+00:00',
+      },
+    },
+  })
+  @ApiResponse({
+    status: HttpStatus.BAD_REQUEST,
+    description: 'Người tạo không tồn tại',
+    schema: {
+      example: {
+        statusCode: 400,
+        message: 'Người tạo không tồn tại',
+      },
+    },
+  })
   async createGroupChatDirect(
     @Body() payload: CreateGroupChatDirectDto,
     @Request() req: any,

@@ -17,7 +17,7 @@ import { CreateUserDto } from './dto/create-auth.dto';
 import { ApiBody, ApiProperty, ApiResponse } from '@nestjs/swagger';
 import { Throttle } from '@nestjs/throttler';
 import { HttpStatusError } from '@/utils/http-error/http-error-mess';
-import { JwtAuthGuard } from './passport/jwt-auth-guard';
+import { JwtRefreshGuard } from './passport/refresh-jwt-auth-guard';
 @Controller('auth')
 // ratelimit request 10/min
 @Throttle({ default: { ttl: 60000, limit: 10 } })
@@ -116,7 +116,7 @@ export class AuthController {
     return this.authService.register(createDto);
   }
   //refresh token
-  @UseGuards(JwtAuthGuard)
+  @UseGuards(JwtRefreshGuard)
   @Post('/refresh-token')
   @ApiResponse({
     status: HttpStatus.CREATED,
