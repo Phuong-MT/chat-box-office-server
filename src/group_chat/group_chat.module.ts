@@ -6,6 +6,7 @@ import { GroupChatShema, GroupChat } from './Schema/group_chat.entity';
 import { DBName } from '@/utils/connectDB';
 import { GroupMembersModule } from '@/group_members/group_members.module';
 import { MyLogger } from '@/utils/logger';
+import { MessagesModule } from '@/messages/messages.module';
 
 @Module({
   imports: [
@@ -14,6 +15,7 @@ import { MyLogger } from '@/utils/logger';
       DBName.CHAT_BOX_DB,
     ),
     forwardRef(() => GroupMembersModule),
+    forwardRef(() => MessagesModule),
   ],
   controllers: [GroupChatController],
   providers: [GroupChatService, MyLogger],
