@@ -12,6 +12,16 @@ async function bootstrap() {
     .setTitle('Chat box offices')
     .setDescription('The chat box API description')
     .setVersion('0.1')
+    .addBearerAuth(
+      {
+        type: 'http',
+        scheme: 'bearer',
+        bearerFormat: 'JWT',
+        name: 'JWT',
+        in: 'header',
+      },
+      'jwt',
+    )
     .build();
   const documentFactory = () =>
     SwaggerModule.createDocument(app, config, { ignoreGlobalPrefix: true });

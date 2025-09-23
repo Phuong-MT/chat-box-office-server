@@ -29,10 +29,15 @@ export class AuthService {
   //login
   async login(user: any) {
     const { password, ...safeUser } = user;
-    const token = await this.registerToken({ email: user.email, password });
+    const token = await this.registerToken({
+      userID: user._id,
+      email: user.email,
+      password,
+      role: user.role,
+    });
     return {
       _id: user._id,
-      userInfo: {
+      user_info: {
         email: user.email,
         username: user.username,
         role: user.role,
@@ -50,6 +55,15 @@ export class AuthService {
     if (IsEmailNotExit) {
       throw new HttpStatusError('Email not exit', 403);
     }
+
+    const IsUserNameNotExit = await this.usersService.findOne(
+      'username',
+      user_name,
+    );
+    if (IsUserNameNotExit) {
+      throw new HttpStatusError('UserName not exit', 403);
+    }
+
     const hassPassword = await hashPassword(password);
     const user = await this.usersService.create({
       user_name,
@@ -68,7 +82,12 @@ export class AuthService {
       social_info: user.social_info,
     };
 
-    const token = await this.registerToken({ email, password });
+    const token = await this.registerToken({
+      userID: user._id,
+      email,
+      password,
+      role: user.role,
+    });
     return {
       _id: user._id,
       user_info: safeUser,
@@ -77,15 +96,27 @@ export class AuthService {
     };
   }
 
-  async registerToken({ email, password }: { email: any; password: any }) {
+  async registerToken({
+    userID,
+    email,
+    password,
+    role,
+  }: {
+    userID: any;
+    email: any;
+    password: any;
+    role: any;
+  }) {
     const jit = generateUUID();
     const access_token = await this.jwtService.signAsync({
+      _id: userID,
       email,
       password,
+      role,
       jit,
     });
     const refresh_token = await this.jwtService.signAsync(
-      { email, password, jit },
+      { _id: userID, email, password, jit, role },
       {
         secret: process.env.JWT_REFRESH_SECRET || 'secretKey',
         expiresIn: process.env.LONG_LIVE || '356d',

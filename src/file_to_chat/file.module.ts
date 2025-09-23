@@ -1,9 +1,11 @@
-import { Module } from '@nestjs/common';
+import { forwardRef, Module } from '@nestjs/common';
 import { FileService } from './file.service';
 import { FileController } from './file.controller';
 import { MongooseModule } from '@nestjs/mongoose';
 import { File, FileSchema } from './Schema/file.entity';
 import { DBName } from '@/utils/connectDB';
+import { CloudinaryModule } from '@/cloudinary/cloudinary.module';
+import { GroupChatModule } from '@/group_chat/group_chat.module';
 
 @Module({
   imports: [
@@ -16,6 +18,8 @@ import { DBName } from '@/utils/connectDB';
       ],
       DBName.CHAT_BOX_DB,
     ),
+    forwardRef(() => CloudinaryModule),
+    forwardRef(() => GroupChatModule),
   ],
   controllers: [FileController],
   providers: [FileService],

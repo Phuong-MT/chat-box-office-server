@@ -1,5 +1,6 @@
+import { GroupChat } from '@/group_chat/Schema/group_chat.entity';
 import { Schema, Prop, SchemaFactory } from '@nestjs/mongoose';
-import { Document } from 'mongoose';
+import { Document, Types } from 'mongoose';
 
 export type FileSchemaDocument = File & Document;
 
@@ -19,6 +20,12 @@ export class File {
 
   @Prop({ required: true, type: String })
   contentType: string;
+
+  @Prop({ required: true, type: String })
+  lastUserIdUpdate: string;
+
+  @Prop({ required: true, type: Types.ObjectId, ref: GroupChat.getName() })
+  groupId: string | Types.ObjectId;
 }
 
 export const FileSchema = SchemaFactory.createForClass(File);

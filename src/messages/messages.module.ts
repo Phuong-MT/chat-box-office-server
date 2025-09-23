@@ -4,6 +4,7 @@ import { MessagesController } from './messages.controller';
 import { MessagesSchema, Messages } from './Schema/messages.entity';
 import { MongooseModule } from '@nestjs/mongoose';
 import { DBName } from '@/utils/connectDB';
+import { MyLogger } from '@/utils/logger';
 
 @Module({
   imports: [
@@ -18,6 +19,7 @@ import { DBName } from '@/utils/connectDB';
     ),
   ],
   controllers: [MessagesController],
-  providers: [MessagesService],
+  providers: [MessagesService, MyLogger],
+  exports: [MessagesService],
 })
 export class MessagesModule {}
