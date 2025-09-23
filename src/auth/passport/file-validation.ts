@@ -2,35 +2,54 @@ import {
   PipeTransform,
   Injectable,
   ArgumentMetadata,
-  BadRequestException,
+  Inject,
 } from '@nestjs/common';
-
+import { HttpStatusError } from '@/utils/http-error/http-error-mess';
 @Injectable()
-export class MultiFileSizeValidationPipe implements PipeTransform {
+export class MultiFileValidationPipe implements PipeTransform {
+  constructor(
+    @Inject('MAX_SIZE_FILE') private readonly maxFileSizeBytes: number,
+    @Inject('ALLOWED_MIME_TYPES') private readonly MimeTypes: string[],
+  ) {}
   transform(values: Express.Multer.File[], metadata: ArgumentMetadata) {
-    const MAX_FILE_SIZE_BYTES = 5.5 * 1024 * 1024;
-
     values.forEach((file) => {
-      if (file.size > MAX_FILE_SIZE_BYTES) {
-        throw new BadRequestException(
+      if (file.size > this.maxFileSizeBytes) {
+        throw new HttpStatusError(
           `File ${file.originalname} too large. Max size is 5.5MB`,
+          400,
+        );
+      }
+      if (!this.MimeTypes.includes(file.mimetype)) {
+        throw new HttpStatusError(
+          `Invalid file type. Allowed types: ${this.MimeTypes.join(', ')}`,
+          400,
         );
       }
     });
 
-    return values; // ✅ trả về array files
+    return values;
   }
 }
 
 @Injectable()
-export class FileSizeValidationPipe implements PipeTransform {
+export class FileValidationPipe implements PipeTransform {
+  constructor(
+    @Inject('MAX_SIZE_FILE') private readonly maxFileSizeBytes: number,
+    @Inject('ALLOWED_MIME_TYPES') private readonly MimeTypes: string[],
+  ) {}
   transform(value: Express.Multer.File, metadata: ArgumentMetadata) {
-    const MAX_FILE_SIZE_BYTES = 5.5 * 1024 * 1024; // ~5.5MB
-
-    if (value.size > MAX_FILE_SIZE_BYTES) {
-      throw new BadRequestException(`File too large. Max size is 5.5MB`);
+    if (value.size > this.maxFileSizeBytes) {
+      throw new HttpStatusError(`File too large. Max size is 5.5MB`, 400);
     }
 
-    return value; // ✅ trả lại file để controller nhận được
+    if (!this.MimeTypes.includes(value.mimetype)) {
+      console.log('mimetype: ', value.mimetype);
+      throw new HttpStatusError(
+        `Invalid file type. Allowed types: ${this.MimeTypes.join(', ')}`,
+        400,
+      );
+    }
+
+    return value;
   }
 }

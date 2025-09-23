@@ -8,6 +8,15 @@ import { JwtModule } from '@nestjs/jwt';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { JwtStrategy } from './passport/jwt.strategy';
 import { JwtRefreshStrategy } from './passport/refresh-jwt-stategy';
+import {
+  FileValidationPipe,
+  MultiFileValidationPipe,
+} from './passport/file-validation';
+import { MulterModule } from '@nestjs/platform-express';
+
+import { Contacts } from '@/chat-box-shared/contact';
+
+const MimeTypeFile = Contacts.MimeTypeFile;
 
 @Module({
   imports: [
@@ -24,8 +33,24 @@ import { JwtRefreshStrategy } from './passport/refresh-jwt-stategy';
         global: true,
       }),
     }),
+    MulterModule.register({}),
   ],
   controllers: [AuthController],
-  providers: [AuthService, LocalStrategy, JwtStrategy, JwtRefreshStrategy],
+  providers: [
+    AuthService,
+    LocalStrategy,
+    JwtStrategy,
+    JwtRefreshStrategy,
+    FileValidationPipe,
+    MultiFileValidationPipe,
+    {
+      provide: 'MAX_SIZE_FILE',
+      useValue: 5.5 * 1024 * 1024,
+    },
+    {
+      provide: 'ALLOWED_MIME_TYPES',
+      useValue: Object.values(MimeTypeFile),
+    },
+  ],
 })
 export class AuthModule {}

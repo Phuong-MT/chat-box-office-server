@@ -10,10 +10,11 @@ import { GroupChatModule } from './group_chat/group_chat.module';
 import { GroupMembersModule } from './group_members/group_members.module';
 import { MessagesModule } from './messages/messages.module';
 import { MessageReactionsModule } from './message_reactions/message_reactions.module';
-import { LinkModule } from './link/link.module';
-import { FileModule } from './file/file.module';
+import { LinkModule } from './link_share_post/link.module';
+import { FileModule } from './file_to_chat/file.module';
 import { APP_GUARD } from '@nestjs/core';
 import { ThrottlerGuard, ThrottlerModule } from '@nestjs/throttler';
+import { CloudinaryModule } from './cloudinary/cloudinary.module';
 @Module({
   imports: [
     ConfigModule.forRoot({
@@ -35,6 +36,7 @@ import { ThrottlerGuard, ThrottlerModule } from '@nestjs/throttler';
     MessageReactionsModule,
     LinkModule,
     FileModule,
+    CloudinaryModule,
   ],
   controllers: [AppController],
   providers: [

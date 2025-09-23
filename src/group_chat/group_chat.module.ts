@@ -19,5 +19,6 @@ import { MessagesModule } from '@/messages/messages.module';
   ],
   controllers: [GroupChatController],
   providers: [GroupChatService, MyLogger],
+  exports: [GroupChatService],
 })
 export class GroupChatModule {}

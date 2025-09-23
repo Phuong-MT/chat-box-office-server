@@ -94,4 +94,8 @@ export class GroupChatService {
     });
     return await createGroupChatDirect.save();
   }
+
+  async findGroupById(groupId: string) {
+    return await this.groupChatModel.findById(groupId);
+  }
 }
