@@ -23,6 +23,7 @@ export class FileController {
 
   @Post('/group-avatar')
   @UseInterceptors(FileInterceptor('group-avatar'))
+  // create or upload file image avatar
   async uploadAvatar(
     @UploadedFile(
       new FileValidationPipe(5.5 * 1025 * 1024, [
@@ -37,13 +38,16 @@ export class FileController {
     //check user_last_update
     const groupId = payload?.groupId;
     const user_id = req.user?._id;
+
     if (!user_id) {
       throw new HttpStatusError('user not found', 400);
     }
+
     // check groupId
     if (!groupId) {
       throw new HttpStatusError('Group chat not found', 400);
     }
+
     return await this.fileService.uploadAvatar(avatar, user_id, groupId);
   }
 }
