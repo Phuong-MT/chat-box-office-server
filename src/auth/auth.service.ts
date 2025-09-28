@@ -38,6 +38,7 @@ export class AuthService {
     return {
       _id: user._id,
       user_info: {
+        _id: user._id,
         email: user.email,
         username: user.username,
         role: user.role,
@@ -78,7 +79,7 @@ export class AuthService {
       email: user.email,
       username: user.username,
       role: user.role,
-      supper_key_group_chat: user.supper_key_group_chat,
+      super_key_group_chat: user.super_key_group_chat,
       social_info: user.social_info,
     };
 

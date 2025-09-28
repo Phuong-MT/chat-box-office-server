@@ -27,7 +27,7 @@ export class User {
   role: RoleEnum;
 
   @Prop()
-  supper_key_group_chat: string[];
+  super_key_group_chat: string[];
 
   @Prop({ default: [] })
   social_info: string[];

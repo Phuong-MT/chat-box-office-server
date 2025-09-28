@@ -10,7 +10,9 @@ import {
   Request,
   HttpStatus,
   HttpCode,
+  Res,
 } from '@nestjs/common';
+import { Response } from 'express';
 import { AuthService } from './auth.service';
 import { LocalAuthGuard } from './passport/local-auth.guard';
 import { CreateUserDto } from './dto/create-auth.dto';
@@ -18,6 +20,8 @@ import { ApiBody, ApiProperty, ApiResponse } from '@nestjs/swagger';
 import { Throttle } from '@nestjs/throttler';
 import { HttpStatusError } from '@/utils/http-error/http-error-mess';
 import { JwtRefreshGuard } from './passport/refresh-jwt-auth-guard';
+import { Contacts } from '@/chat-box-shared/contact';
+
 @Controller('auth')
 // ratelimit request 10/min
 @Throttle({ default: { ttl: 60000, limit: 10 } })
@@ -65,8 +69,33 @@ export class AuthController {
       },
     },
   })
-  async login(@Request() req: any) {
-    return await this.authService.login(req.user);
+  async login(
+    @Request() req: any,
+    @Res({ passthrough: true }) response: Response,
+  ) {
+    const userInfor = await this.authService.login(req.user);
+    const access_token = userInfor.access_token;
+    const refresh_token = userInfor.refresh_token;
+
+    const cookieOptions = {
+      httpOnly: true,
+      secure: process.env.COOKIE_SECURE === 'true', // true in prod
+      sameSite: 'lax' as const,
+      domain: process.env.COOKIE_DOMAIN || undefined,
+      path: '/',
+    };
+
+    response.cookie(Contacts.jwt.ACCESS_TOKEN, access_token, {
+      ...cookieOptions,
+      maxAge: 15 * 60 * 1000,
+    });
+
+    response.cookie(Contacts.jwt.REFRESH_TOKEN, refresh_token, {
+      ...cookieOptions,
+      maxAge: 7 * 24 * 60 * 60 * 1000,
+    });
+
+    return userInfor.user_info;
   }
 
   //register
