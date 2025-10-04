@@ -21,12 +21,11 @@ export class FileService {
     user_id: string,
     groupId: string,
   ) {
-    // put file img to cloud
-    const descriptionFile = await this.cloudinaryServices.uploadImage(
-      avatar,
-      'group-avatar',
-      groupId,
-    );
+    const [GroupChat, descriptionFile] = await Promise.all([
+      this.fileModel.findOne({ groupId }),
+      this.cloudinaryServices.uploadImage(avatar, 'group-avatar', groupId),
+    ]);
+
     // check url
     if (
       !descriptionFile ||
@@ -36,22 +35,17 @@ export class FileService {
     }
 
     //check file
-    const GroupChat = await this.fileModel.findOne({
-      groupId,
-    });
     if (GroupChat) {
       GroupChat.link = descriptionFile.url || descriptionFile.secure_url;
       GroupChat.lastUserIdUpdate = user_id;
       return GroupChat.save();
     }
     // create url file img to db
-    const fileInfor = await this.fileModel.create({
+    return await this.fileModel.create({
       name: descriptionFile.original_filename,
       link: descriptionFile.url || descriptionFile.secure_url,
       contentType: descriptionFile.resource_type,
       lastUserIdUpdate: user_id,
-      groupId,
     });
-    return fileInfor.save();
   }
 }
