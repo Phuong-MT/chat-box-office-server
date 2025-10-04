@@ -82,7 +82,7 @@ export class AuthController {
       secure: process.env.COOKIE_SECURE === 'true', // true in prod
       sameSite: 'lax' as const,
       domain: process.env.COOKIE_DOMAIN || undefined,
-      path: '/',
+      path: '/auth',
     };
 
     response.cookie(Contacts.jwt.ACCESS_TOKEN, access_token, {
@@ -141,8 +141,37 @@ export class AuthController {
       },
     },
   })
-  async register(@Body() createDto: CreateUserDto) {
-    return this.authService.register(createDto);
+  async register(
+    @Body() createDto: CreateUserDto,
+    @Res({ passthrough: true }) response: Response,
+  ) {
+    const { user_name, email, password } = createDto;
+
+    const userInfo = await this.authService.register({
+      user_name,
+      email,
+      password,
+    });
+
+    const cookieOptions = {
+      httpOnly: true,
+      secure: process.env.COOKIE_SECURE === 'true', // true in prod
+      sameSite: 'lax' as const,
+      domain: process.env.COOKIE_DOMAIN || undefined,
+      path: '/auth',
+    };
+
+    response.cookie(Contacts.jwt.ACCESS_TOKEN, userInfo.access_token, {
+      ...cookieOptions,
+      maxAge: 15 * 60 * 1000,
+    });
+
+    response.cookie(Contacts.jwt.REFRESH_TOKEN, userInfo.refresh_token, {
+      ...cookieOptions,
+      maxAge: 7 * 24 * 60 * 60 * 1000,
+    });
+
+    return userInfo.user_info;
   }
   //refresh token
   @UseGuards(JwtRefreshGuard)
@@ -159,17 +188,54 @@ export class AuthController {
       },
     },
   })
-  async refreshToken(@Request() req: any) {
+  async refreshToken(
+    @Request() req: any,
+    @Res({ passthrough: true }) response: Response,
+  ) {
     const user = req.user;
     if (!user) {
       throw new HttpStatusError('Không tìm thấy User', 404);
     }
     const { _id, email, password, role } = req.user;
-    return this.authService.registerToken({
+    const token = await this.authService.registerToken({
       userID: _id,
       email,
       password,
       role,
     });
+    const cookieOptions = {
+      httpOnly: true,
+      secure: process.env.COOKIE_SECURE === 'true', // true in prod
+      sameSite: 'lax' as const,
+      domain: process.env.COOKIE_DOMAIN || undefined,
+      path: '/auth',
+    };
+
+    response.cookie(Contacts.jwt.ACCESS_TOKEN, token.access_token, {
+      ...cookieOptions,
+      maxAge: 15 * 60 * 1000,
+    });
+
+    response.cookie(Contacts.jwt.REFRESH_TOKEN, token.refresh_token, {
+      ...cookieOptions,
+      maxAge: 7 * 24 * 60 * 60 * 1000,
+    });
+    return 'Refresh token successfully';
+  }
+
+  //logout
+  @Post('logout')
+  async logout(@Res({ passthrough: true }) res: Response) {
+    const cookieOptions = {
+      httpOnly: true,
+      secure: process.env.COOKIE_SECURE === 'true', // true in prod
+      sameSite: 'lax' as const,
+      domain: process.env.COOKIE_DOMAIN || undefined,
+      path: '/auth',
+      expires: new Date(0),
+    };
+    res.cookie(Contacts.jwt.ACCESS_TOKEN, '', { ...cookieOptions });
+    res.cookie(Contacts.jwt.REFRESH_TOKEN, '', { ...cookieOptions });
+    return 'Logged out successfully';
   }
 }

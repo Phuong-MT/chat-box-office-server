@@ -76,6 +76,7 @@ export class AuthService {
       throw new HttpStatusError('Server Error', 500);
     }
     const safeUser = {
+      _id: user._id,
       email: user.email,
       username: user.username,
       role: user.role,
