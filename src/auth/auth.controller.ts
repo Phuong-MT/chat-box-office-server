@@ -82,7 +82,7 @@ export class AuthController {
       secure: process.env.COOKIE_SECURE === 'true', // true in prod
       sameSite: 'lax' as const,
       domain: process.env.COOKIE_DOMAIN || undefined,
-      path: '/auth',
+      path: '/',
     };
 
     response.cookie(Contacts.jwt.ACCESS_TOKEN, access_token, {
@@ -158,7 +158,7 @@ export class AuthController {
       secure: process.env.COOKIE_SECURE === 'true', // true in prod
       sameSite: 'lax' as const,
       domain: process.env.COOKIE_DOMAIN || undefined,
-      path: '/auth',
+      path: '/',
     };
 
     response.cookie(Contacts.jwt.ACCESS_TOKEN, userInfo.access_token, {
@@ -208,7 +208,7 @@ export class AuthController {
       secure: process.env.COOKIE_SECURE === 'true', // true in prod
       sameSite: 'lax' as const,
       domain: process.env.COOKIE_DOMAIN || undefined,
-      path: '/auth',
+      path: '/',
     };
 
     response.cookie(Contacts.jwt.ACCESS_TOKEN, token.access_token, {
