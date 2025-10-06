@@ -24,7 +24,6 @@ import { MyLogger } from '@/utils/logger';
 
 @Controller('/api/group-chat')
 @UseGuards(JwtAuthGuard)
-@ApiBearerAuth('jwt')
 export class GroupChatController {
   constructor(
     private readonly groupChatService: GroupChatService,

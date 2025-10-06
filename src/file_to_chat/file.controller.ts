@@ -16,7 +16,7 @@ import { Contacts } from '@/chat-box-shared/contact';
 import { HttpStatusError } from '@/utils/http-error/http-error-mess';
 
 const MimeTypes = Contacts.MimeTypeFile;
-@Controller('file')
+@Controller('/api/file')
 @UseGuards(JwtAuthGuard)
 export class FileController {
   constructor(private readonly fileService: FileService) {}

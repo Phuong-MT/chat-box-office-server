@@ -1,5 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsNotEmpty, IsOptional, IsString } from 'class-validator';
+import { IsNotEmpty, IsNumber, IsOptional, IsString } from 'class-validator';
 
 export class CreateMessageBaseDto {
   @ApiProperty()
@@ -18,5 +18,19 @@ export class CreateMessageBaseDto {
 
   @ApiProperty()
   @IsOptional()
-  fileId: string;
+  file: string;
+}
+export class SendMessageDto extends CreateMessageBaseDto {
+  isRetrieve?: boolean;
+}
+
+export class GetMessageByGroupID {
+  @ApiProperty()
+  @IsOptional()
+  message_late: boolean;
+
+  @ApiProperty()
+  @IsOptional()
+  @IsString()
+  pre_message: string; // pre-message to get
 }

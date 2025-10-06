@@ -4,7 +4,7 @@ import { JwtAuthGuard } from '@/auth/passport/jwt-auth-guard';
 import { HttpStatusError } from '@/utils/http-error/http-error-mess';
 import { UserInfoDto } from './dto/user-infor.dto';
 
-@Controller('user')
+@Controller('/api/user')
 export class UserController {
   constructor(private readonly userService: UserService) {}
   @Get('user-info')

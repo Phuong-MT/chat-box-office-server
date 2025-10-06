@@ -35,7 +35,10 @@ export class Messages {
   respondTo: Types.ObjectId;
 
   @Prop({ required: false, type: [String] })
-  usesSeen: [string];
+  userSeen: [string];
+
+  @Prop({ required: false, type: [String] })
+  reaction_message: [string];
 
   @Prop({ required: false, type: Boolean, default: false })
   isRetrieve: boolean;

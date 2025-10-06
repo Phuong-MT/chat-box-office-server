@@ -22,7 +22,7 @@ import { HttpStatusError } from '@/utils/http-error/http-error-mess';
 import { JwtRefreshGuard } from './passport/refresh-jwt-auth-guard';
 import { Contacts } from '@/chat-box-shared/contact';
 
-@Controller('auth')
+@Controller('/api/auth')
 // ratelimit request 10/min
 @Throttle({ default: { ttl: 60000, limit: 10 } })
 export class AuthController {
@@ -87,12 +87,12 @@ export class AuthController {
 
     response.cookie(Contacts.jwt.ACCESS_TOKEN, access_token, {
       ...cookieOptions,
-      maxAge: 15 * 60 * 1000,
+      maxAge: 7 * 24 * 60 * 1000,
     });
 
     response.cookie(Contacts.jwt.REFRESH_TOKEN, refresh_token, {
       ...cookieOptions,
-      maxAge: 7 * 24 * 60 * 60 * 1000,
+      maxAge: 365 * 24 * 60 * 60 * 1000,
     });
 
     return userInfor.user_info;
@@ -163,12 +163,12 @@ export class AuthController {
 
     response.cookie(Contacts.jwt.ACCESS_TOKEN, userInfo.access_token, {
       ...cookieOptions,
-      maxAge: 15 * 60 * 1000,
+      maxAge: 7 * 24 * 60 * 1000,
     });
 
     response.cookie(Contacts.jwt.REFRESH_TOKEN, userInfo.refresh_token, {
       ...cookieOptions,
-      maxAge: 7 * 24 * 60 * 60 * 1000,
+      maxAge: 365 * 24 * 60 * 60 * 1000,
     });
 
     return userInfo.user_info;
@@ -213,12 +213,12 @@ export class AuthController {
 
     response.cookie(Contacts.jwt.ACCESS_TOKEN, token.access_token, {
       ...cookieOptions,
-      maxAge: 15 * 60 * 1000,
+      maxAge: 7 * 24 * 60 * 1000,
     });
 
     response.cookie(Contacts.jwt.REFRESH_TOKEN, token.refresh_token, {
       ...cookieOptions,
-      maxAge: 7 * 24 * 60 * 60 * 1000,
+      maxAge: 365 * 24 * 60 * 60 * 1000,
     });
     return 'Refresh token successfully';
   }

@@ -4,6 +4,7 @@ import { MyLogger } from './utils/logger';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { ValidationPipe } from '@nestjs/common';
 import * as cookieParser from 'cookie-parser';
+import { IoAdapter } from '@nestjs/platform-socket.io';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
@@ -41,6 +42,8 @@ async function bootstrap() {
       whitelist: true,
     }),
   );
+
+  app.useWebSocketAdapter(new IoAdapter(app));
 
   await app.listen(process.env.PORT ?? 5000, () => {
     logger.log(`Server is running on: ` + process.env.PORT);
