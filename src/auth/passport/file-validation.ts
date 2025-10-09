@@ -5,6 +5,7 @@ import {
   Inject,
 } from '@nestjs/common';
 import { HttpStatusError } from '@/utils/http-error/http-error-mess';
+
 @Injectable()
 export class MultiFileValidationPipe implements PipeTransform {
   constructor(
@@ -12,6 +13,9 @@ export class MultiFileValidationPipe implements PipeTransform {
     @Inject('ALLOWED_MIME_TYPES') private readonly MimeTypes: string[],
   ) {}
   transform(values: Express.Multer.File[], metadata: ArgumentMetadata) {
+    if (values.length === 0) {
+      throw new HttpStatusError('files is required', 400);
+    }
     values.forEach((file) => {
       if (file.size > this.maxFileSizeBytes) {
         throw new HttpStatusError(
@@ -38,6 +42,10 @@ export class FileValidationPipe implements PipeTransform {
     @Inject('ALLOWED_MIME_TYPES') private readonly MimeTypes: string[],
   ) {}
   transform(value: Express.Multer.File, metadata: ArgumentMetadata) {
+    console.log('file: ', value);
+    if (!value) {
+      throw new HttpStatusError('file is required', 400);
+    }
     if (value.size > this.maxFileSizeBytes) {
       throw new HttpStatusError(`File too large. Max size is 5.5MB`, 400);
     }

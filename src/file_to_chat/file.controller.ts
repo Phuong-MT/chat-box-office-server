@@ -2,6 +2,7 @@ import {
   Body,
   Controller,
   Post,
+  Query,
   Request,
   UploadedFile,
   UploadedFiles,
@@ -12,8 +13,10 @@ import { FileService } from './file.service';
 import { FileInterceptor, FilesInterceptor } from '@nestjs/platform-express';
 import { FileValidationPipe } from '@/auth/passport/file-validation';
 import { JwtAuthGuard } from '@/auth/passport/jwt-auth-guard';
-import { Contacts } from '@/chat-box-shared/contact';
 import { HttpStatusError } from '@/utils/http-error/http-error-mess';
+import { Contacts } from '@/chat-box-shared/contact';
+
+const MimeTypeFile = Contacts.MimeTypeFile;
 
 const MimeTypes = Contacts.MimeTypeFile;
 @Controller('/api/file')
@@ -49,5 +52,25 @@ export class FileController {
     }
 
     return await this.fileService.uploadAvatar(avatar, user_id, groupId);
+  }
+  @Post('/add-file')
+  @UseInterceptors(FileInterceptor('file'))
+  async uploadFile(
+    @UploadedFile(
+      new FileValidationPipe(5.5 * 1024 * 1024, Object.values(MimeTypeFile)),
+    )
+    file: Express.Multer.File,
+    @Query() query: any,
+    @Request() req: any,
+  ) {
+    const user_id = req.user?._id;
+    const groupId = query.groupId;
+    if (!user_id) {
+      throw new HttpStatusError('user not exit', 400);
+    }
+    if (!groupId) {
+      throw new HttpStatusError('groupId not found', 404);
+    }
+    return this.fileService.uploadFile(file, groupId, user_id);
   }
 }

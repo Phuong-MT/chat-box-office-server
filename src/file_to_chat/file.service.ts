@@ -48,4 +48,26 @@ export class FileService {
       lastUserIdUpdate: user_id,
     });
   }
+
+  async uploadFile(
+    file: Express.Multer.File,
+    groupId: string,
+    user_id: string,
+  ) {
+    //push file to cloud
+    const fileDescription = await this.cloudinaryServices.uploadFile(
+      file,
+      'file',
+      groupId,
+    );
+    // add db
+    const fileInfo = new this.fileModel({
+      name: fileDescription.public_id,
+      link: fileDescription.url || fileDescription.secure_url,
+      contentType: fileDescription.type,
+      groupId,
+      lastUserIdUpdate: user_id,
+    });
+    return await fileInfo.save();
+  }
 }
