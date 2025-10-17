@@ -11,11 +11,12 @@ import {
 import { Server, Socket } from 'socket.io';
 import { ChatboxService } from './chatbox.service';
 import { MyLogger } from '@/utils/logger';
-import { Contacts } from '@/chat-box-shared/contact';
-import { SendMessageDto } from '@/messages/dto/create_messages.dto';
+import { Contacts, NAME_SPACE_SOCKET } from '@/chat-box-shared/contact';
+import { UseGuards } from '@nestjs/common';
+import { WsJwtGuard } from '@/auth/passport/chatbox.guard';
 @WebSocketGateway(4001, {
   cors: '*',
-  path: '/socket',
+  path: `/socket/${NAME_SPACE_SOCKET.CHAT_BOX}`,
   transports: ['websocket'],
 })
 export class ChatboxGateway
@@ -28,13 +29,12 @@ export class ChatboxGateway
   static ChatBoxMessages = Contacts.SUBSCRIBE_MESSAGE.CHAT_BOX;
 
   @WebSocketServer() io: Server;
+
   afterInit() {
     this.logger.log('Initialized');
   }
 
   handleConnection(client: Socket, ...args: any[]) {
-    const { sockets } = this.io.sockets;
-
     this.logger.log(`Client id: ${client.id} connected`);
   }
 
@@ -42,13 +42,12 @@ export class ChatboxGateway
     this.logger.log(`Cliend id:${client.id} disconnected`);
   }
 
-  @SubscribeMessage(`${ChatboxGateway.ChatBoxMessages.SEND_MESSAGE}`)
+  @UseGuards(WsJwtGuard)
+  @SubscribeMessage('ping')
   handleMessage(
     @ConnectedSocket() socket: Socket,
     @ConnectedSocket() client: Socket,
-    @MessageBody() body: SendMessageDto,
   ) {
-    const { groupId, content, link, file } = body;
     this.logger.log(`Message received from client id: ${client.id}`);
     socket.emit('pong', 'hi');
     return {

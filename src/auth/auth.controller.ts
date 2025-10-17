@@ -87,7 +87,7 @@ export class AuthController {
 
     response.cookie(Contacts.jwt.ACCESS_TOKEN, access_token, {
       ...cookieOptions,
-      maxAge: 7 * 24 * 60 * 1000,
+      maxAge: 7 * 24 * 60 * 60 * 1000,
     });
 
     response.cookie(Contacts.jwt.REFRESH_TOKEN, refresh_token, {
@@ -163,7 +163,7 @@ export class AuthController {
 
     response.cookie(Contacts.jwt.ACCESS_TOKEN, userInfo.access_token, {
       ...cookieOptions,
-      maxAge: 7 * 24 * 60 * 1000,
+      maxAge: 7 * 24 * 60 * 60 * 1000,
     });
 
     response.cookie(Contacts.jwt.REFRESH_TOKEN, userInfo.refresh_token, {
@@ -213,7 +213,7 @@ export class AuthController {
 
     response.cookie(Contacts.jwt.ACCESS_TOKEN, token.access_token, {
       ...cookieOptions,
-      maxAge: 7 * 24 * 60 * 1000,
+      maxAge: 7 * 24 * 60 * 60 * 1000,
     });
 
     response.cookie(Contacts.jwt.REFRESH_TOKEN, token.refresh_token, {
