@@ -14,23 +14,28 @@ export class CreateMessageBaseDto {
 
   @ApiProperty()
   @IsOptional()
-  link: string;
+  link?: string;
 
   @ApiProperty()
   @IsOptional()
-  file: string;
+  file?: string;
+
+  @ApiProperty()
+  @IsNumber()
+  frameTime: number;
 }
 export class SendMessageDto extends CreateMessageBaseDto {
+  @ApiProperty()
   isRetrieve?: boolean;
 }
 
 export class GetMessageByGroupID {
   @ApiProperty()
   @IsOptional()
-  message_late: boolean;
+  message_late?: boolean;
 
   @ApiProperty()
   @IsOptional()
   @IsString()
-  pre_message: string; // pre-message to get
+  pre_message?: string; // pre-message to get
 }

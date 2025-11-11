@@ -16,6 +16,7 @@ export class Messages {
   @Prop({ required: true, type: Types.ObjectId, ref: GroupChat.getName() })
   groupChatId: Types.ObjectId;
 
+  //userId
   @Prop({ required: true, type: String })
   sender: string;
 
@@ -42,6 +43,9 @@ export class Messages {
 
   @Prop({ required: false, type: Boolean, default: false })
   isRetrieve: boolean;
+
+  @Prop({ required: true, type: Number })
+  frameTime: number;
 }
 
 export const MessagesSchema = SchemaFactory.createForClass(Messages);

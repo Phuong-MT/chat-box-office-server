@@ -1,10 +1,11 @@
 import { Injectable } from '@nestjs/common';
 import { UserService } from '@/user/user.service';
 import { JwtService } from '@nestjs/jwt';
-import { hashPassword, comparePassword, generateUUID } from '@/utils/helper';
+import { hashPassword, comparePassword } from '@/utils/helper';
 import { CreateUserDto } from './dto/create-auth.dto';
 import { HttpStatusError } from '@/utils/http-error/http-error-mess';
 import { ConfigModule, ConfigService } from '@nestjs/config';
+import { generateID } from '@/chat-box-shared/utils';
 
 @Injectable()
 export class AuthService {
@@ -109,7 +110,7 @@ export class AuthService {
     password: any;
     role: any;
   }) {
-    const jit = generateUUID();
+    const jit = generateID();
     const access_token = await this.jwtService.signAsync({
       _id: userID,
       email,

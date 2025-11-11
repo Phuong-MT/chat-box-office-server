@@ -1,4 +1,4 @@
-import { v4 } from 'uuid';
+import { Types } from 'mongoose';
 const bcrypt = require('bcrypt');
 const saltRounds = 10;
 
@@ -18,6 +18,6 @@ export const comparePassword = async (password: string, hash: string) => {
   }
 };
 
-export const generateUUID = () => {
-  return v4();
-};
+export function stringToObjectId(str: string) {
+  return Types.ObjectId.isValid(str) ? new Types.ObjectId(str) : null;
+}

@@ -1,7 +1,9 @@
 import {
   Body,
   Controller,
+  Get,
   HttpStatus,
+  Param,
   Post,
   Request,
   UseGuards,
@@ -108,5 +110,14 @@ export class GroupChatController {
       throw new HttpStatusError('Người tạo không tồn tại', 400);
     }
     return this.groupChatService.createGroupChatDirect(payload, userId);
+  }
+
+  @Get('/check/:groupId')
+  async checkGroup(@Param('groupId') groupId: string) {
+    const groupRes = await this.groupChatService.findGroupById(groupId);
+    if (!groupRes) {
+      throw new HttpStatusError('group not found', 404);
+    }
+    return { group: groupRes };
   }
 }

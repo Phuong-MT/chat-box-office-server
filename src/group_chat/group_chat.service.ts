@@ -13,6 +13,7 @@ import { Contacts } from '@/chat-box-shared/contact';
 import { generateID } from '@/chat-box-shared/utils';
 import { CreateGroupMembersDto } from '@/group_members/dto/create_group_members';
 import { MyLogger } from '@/utils/logger';
+import { stringToObjectId } from '@/utils/helper';
 
 @Injectable()
 export class GroupChatService {
@@ -96,6 +97,7 @@ export class GroupChatService {
   }
 
   async findGroupById(groupId: string) {
-    return await this.groupChatModel.findById(groupId);
+    const id = stringToObjectId(groupId);
+    return await this.groupChatModel.findById(id);
   }
 }

@@ -10,9 +10,27 @@ interface MessageDto {
   respondTo?: string;
   userSeen?: string[];
   isRetrieve?: boolean;
+  frameTime?: number;
 }
 
 export interface MessageResponseDto {
   groupId: string;
   message: MessageDto | MessageDto[];
+}
+
+export class FrameMessageDto {
+  _id: string;
+  status: string;
+  text: string;
+}
+export class MessageFrameDto {
+  _id: string;
+  timeChat: number;
+  userId: string;
+  contents: FrameMessageDto[];
+}
+
+export class MessageResponseDtoV2 {
+  groupId: string;
+  frames: MessageFrameDto[];
 }

@@ -1,10 +1,11 @@
-import { Module } from '@nestjs/common';
+import { forwardRef, Module } from '@nestjs/common';
 import { MessagesService } from './messages.service';
 import { MessagesController } from './messages.controller';
 import { MessagesSchema, Messages } from './Schema/messages.entity';
 import { MongooseModule } from '@nestjs/mongoose';
 import { DBName } from '@/utils/connectDB';
 import { MyLogger } from '@/utils/logger';
+import { GroupChatModule } from '@/group_chat/group_chat.module';
 
 @Module({
   imports: [
@@ -17,6 +18,7 @@ import { MyLogger } from '@/utils/logger';
       ],
       DBName.CHAT_BOX_DB,
     ),
+    forwardRef(() => GroupChatModule),
   ],
   controllers: [MessagesController],
   providers: [MessagesService, MyLogger],
