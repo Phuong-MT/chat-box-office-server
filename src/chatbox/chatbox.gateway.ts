@@ -145,6 +145,17 @@ export class ChatboxGateway
     const contentId = Array.isArray(messages.message)
       ? messages.message[0]?._id
       : messages.message?._id;
-    return { success: true, contentId: 1 };
+
+    client
+      .to(groupId)
+      .emit(`${ChatboxGateway.ChatBoxMessages.LISTEN_MESSAGE}`, {
+        chatContent: {
+          text,
+          contentId,
+        },
+        frameMessage,
+        userId: user._id,
+      });
+    return { success: true, contentId };
   }
 }
