@@ -120,4 +120,12 @@ export class GroupChatController {
     }
     return { group: groupRes };
   }
+  @Get('/group-info/:groupId')
+  async getGroupInfo(@Param('groupId') groupId: string) {
+    const groupRes = await this.groupChatService.findGroupById(groupId);
+    if (!groupRes) {
+      throw new HttpStatusError('group not found', 404);
+    }
+    return { groupInfo: groupRes };
+  }
 }

@@ -12,11 +12,8 @@ import { Server, Socket } from 'socket.io';
 import { ChatboxService } from './chatbox.service';
 import { MyLogger } from '@/utils/logger';
 import { Contacts, NAME_SPACE_SOCKET } from '@/chat-box-shared/contact';
-import { BadGatewayException, UseGuards, ValidationPipe } from '@nestjs/common';
-import { WsJwtGuard } from '@/auth/passport/chatbox.guard';
 import * as cookie from 'cookie';
 import { serviceJWT } from '@/utils/jwt';
-import { generateID } from '@/chat-box-shared/utils';
 import { SendMessageGateWayDto } from './dto/send-message.dto';
 @WebSocketGateway(4001, {
   cors: '*',
@@ -80,7 +77,7 @@ export class ChatboxGateway
   @SubscribeMessage(`${ChatboxGateway.ChatBoxMessages.JOIN_LIVE_GROUPCHAT}`)
   handleJoinGroupChat(
     @ConnectedSocket() client: Socket,
-    @MessageBody(new ValidationPipe()) body: any,
+    @MessageBody() body: any,
   ) {
     const { groupId } = body;
 

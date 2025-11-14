@@ -10,10 +10,10 @@ import { Model, Types } from 'mongoose';
 import { Connection } from 'mongoose';
 import { GroupMembersService } from '@/group_members/group_members.service';
 import { Contacts } from '@/chat-box-shared/contact';
-import { generateID } from '@/chat-box-shared/utils';
 import { CreateGroupMembersDto } from '@/group_members/dto/create_group_members';
 import { MyLogger } from '@/utils/logger';
 import { stringToObjectId } from '@/utils/helper';
+import { GroupMember } from '@/group_members/Schema/group_members.entity';
 
 @Injectable()
 export class GroupChatService {
@@ -98,6 +98,17 @@ export class GroupChatService {
 
   async findGroupById(groupId: string) {
     const id = stringToObjectId(groupId);
-    return await this.groupChatModel.findById(id);
+    const agg = [
+      { $match: { _id: id } },
+      {
+        $lookup: {
+          from: GroupMember.getName(),
+          localField: '_id',
+          foreignField: 'groupId',
+          as: 'members',
+        },
+      },
+    ];
+    return await this.groupChatModel.aggregate(agg).then((res) => res[0]);
   }
 }
